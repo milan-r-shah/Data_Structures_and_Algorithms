@@ -14,7 +14,8 @@ class LinkedList {
 public:
     LinkedList();
     void printLinkedList() const;
-    void addNodeAtBeginning(int data);
+    void addNodeAtBeginning(int data = 0);
+    void addNodeAtEnd(int data = 0);
 
 private:
     Node* head;
@@ -61,10 +62,26 @@ void LinkedList::addNodeAtBeginning(int data) {
     head = newNode;
 }
 
+// LinkedList class method for adding a Node at the end
+void LinkedList::addNodeAtEnd(int data) {
+    Node* newNode = new Node(data);
+
+    // creating a tempNode which will iterate through all the nodes
+    Node* tempNode = head;
+    while (tempNode->next) {
+        tempNode = tempNode->next;
+    }
+
+    tempNode->next = newNode;
+    newNode->next = nullptr;
+}
+
 int main() {
     LinkedList llobj;
     llobj.printLinkedList();
     llobj.addNodeAtBeginning(13);
+    llobj.printLinkedList();
+    llobj.addNodeAtEnd(5);
     llobj.printLinkedList();
 
     return 0;
