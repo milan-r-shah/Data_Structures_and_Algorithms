@@ -78,16 +78,22 @@ void LinkedList::addNodeAtEnd(int data) {
 }
 
 // LinkedList class method for adding a Node at a given Position from the Start
-// indexing starts from 0 i.e. for 0th index, this method will add a Node at the start of linked list
+// Here, indexing starts from 1. So, for index = 1, this method will add a Node 
+// at the start of linked list i.e. it would become a 'head'
 void LinkedList::addNodeAtPosFromStart(int index, int data) {
-    if (index == 0) {
+    if(index < 1) {
+        std::cout << "Invalid index\n";
+        return;
+    }
+
+    if (index == 1) {
         addNodeAtStart(data);
         return;
     }
 
     Node* newNode = new Node(data);
     Node* tempNode = head;
-    for (int i = 0; i < index - 1; ++i) {
+    for (int i = 1; i < index - 1; ++i) {
         if (tempNode->next)
             tempNode = tempNode->next;
         else {
@@ -107,7 +113,7 @@ int main() {
     // llobj.printLinkedList();
     // llobj.addNodeAtEnd(5);
     // llobj.printLinkedList();
-    llobj.addNodeAtPosFromStart(4, 31);
+    llobj.addNodeAtPosFromStart(-50, 31);
     llobj.printLinkedList();
 
     return 0;
