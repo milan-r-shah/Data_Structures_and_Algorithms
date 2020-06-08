@@ -14,8 +14,9 @@ class LinkedList {
 public:
     LinkedList();
     void printLinkedList() const;
-    void addNodeAtBeginning(int data = 0);
+    void addNodeAtStart(int data = 0);
     void addNodeAtEnd(int data = 0);
+    void addNodeAtPosFromStart(int index, int data = 0);
 
 private:
     Node* head;
@@ -55,8 +56,8 @@ void LinkedList::printLinkedList() const {
     std::cout << "nullptr\n";
 }
 
-// LinkedList class method for adding a Node at the beginning
-void LinkedList::addNodeAtBeginning(int data) {
+// LinkedList class method for adding a Node at the Start
+void LinkedList::addNodeAtStart(int data) {
     Node* newNode = new Node(data);
     newNode->next = head;
     head = newNode;
@@ -76,12 +77,31 @@ void LinkedList::addNodeAtEnd(int data) {
     newNode->next = nullptr;
 }
 
+// LinkedList class method for adding a Node at a given Position from the Start
+void LinkedList::addNodeAtPosFromStart(int index, int data) {
+    if (index == 0) {
+        addNodeAtStart(data);
+        return;
+    }
+
+    Node* newNode = new Node(data);
+    Node* tempNode = head;
+    for (int i = 0; i < index - 1; ++i) {
+        tempNode = tempNode->next;
+    }
+
+    newNode->next = tempNode->next;
+    tempNode->next = newNode;
+}
+
 int main() {
     LinkedList llobj;
     llobj.printLinkedList();
-    llobj.addNodeAtBeginning(13);
-    llobj.printLinkedList();
-    llobj.addNodeAtEnd(5);
+    // llobj.addNodeAtStart(13);
+    // llobj.printLinkedList();
+    // llobj.addNodeAtEnd(5);
+    // llobj.printLinkedList();
+    llobj.addNodeAtPosFromStart(0, 31);
     llobj.printLinkedList();
 
     return 0;
