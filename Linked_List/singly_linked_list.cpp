@@ -18,39 +18,40 @@ public:
     void addNodeAtEnd(int data = 0);
     void addNodeAtPosFromStart(int index, int data = 0);
     void addNodeAtPosFromEnd(int index, int data = 0);
+    void reverseLinkedList();
 
 private:
-    Node* head;
-    Node* n2;
-    Node* n3;
-    Node* n4;
+    Node* _head;
+    Node* _n2;
+    Node* _n3;
+    Node* _n4;
 };
 
 // LinkedList constructor
 LinkedList::LinkedList() {
     // Creating 4 nodes
-    head = new Node();
-    n2 = new Node();
-    n3 = new Node();
-    n4 = new Node();
+    _head = new Node();
+    _n2 = new Node();
+    _n3 = new Node();
+    _n4 = new Node();
 
-    head->data = 10;
-    head->next = n2;
+    _head->data = 10;
+    _head->next = _n2;
 
-    n2->data = 20;
-    n2->next = n3;
+    _n2->data = 20;
+    _n2->next = _n3;
 
-    n3->data = 30;
-    n3->next = n4;
+    _n3->data = 30;
+    _n3->next = _n4;
 
-    n4->data = 40;
-    n4->next = nullptr;
+    _n4->data = 40;
+    _n4->next = nullptr;
     // head->next = nullptr;
 }
 
 // LinkedList class method for printing LinkedList
 void LinkedList::printLinkedList() const {
-    Node* tempNode = head;
+    Node* tempNode = _head;
     while (tempNode) {
         std::cout << tempNode->data << " --> ";
         tempNode = tempNode->next;
@@ -61,8 +62,8 @@ void LinkedList::printLinkedList() const {
 // LinkedList class method for adding a Node at the Start
 void LinkedList::addNodeAtStart(int data) {
     Node* newNode = new Node(data);
-    newNode->next = head;
-    head = newNode;
+    newNode->next = _head;
+    _head = newNode;
 }
 
 // LinkedList class method for adding a Node at the end
@@ -70,7 +71,7 @@ void LinkedList::addNodeAtEnd(int data) {
     Node* newNode = new Node(data);
 
     // creating a tempNode which will iterate through all the nodes
-    Node* tempNode = head;
+    Node* tempNode = _head;
     while (tempNode->next) {
         tempNode = tempNode->next;
     }
@@ -91,12 +92,12 @@ void LinkedList::addNodeAtPosFromStart(int index, int data) {
     Node* newNode = new Node(data);
 
     if (index == 1) {
-        newNode->next = head;
-        head = newNode;
+        newNode->next = _head;
+        _head = newNode;
         return;
     }
 
-    Node* tempNode = head;
+    Node* tempNode = _head;
     for (int i = 1; i < index - 1; ++i) {
         if (tempNode->next)
             tempNode = tempNode->next;
@@ -144,12 +145,12 @@ void LinkedList::addNodeAtPosFromEnd(int index, int data) {
     // ptr2->next = newNode;
 
     Node* newNode = new Node(data);
-    newNode->next = head;
+    newNode->next = _head;
     Node* ptr1 = newNode;
     Node* ptr2 = newNode;
 
     // the first pointer would be iterate through Nodes based on the index
-    // So, later on, when the first one reaches at the End, the 
+    // So, later on, when the first one reaches at the End, the
     // second pointer reaches at the required index, if valid
     for (int i = 1; i < index; ++i) {
         if (ptr1->next)
@@ -170,21 +171,48 @@ void LinkedList::addNodeAtPosFromEnd(int index, int data) {
         newNode->next = ptr2->next;
         ptr2->next = newNode;
     } else {
-        ptr2->next = head;
-        head = ptr2;
+        ptr2->next = _head;
+        _head = ptr2;
     }
+}
+
+// LinkedList class method for reversing LinkedList
+void LinkedList::reverseLinkedList() {
+    // 3 pointers
+    Node* prev = nullptr;   // keep the address of previous node
+    Node* curr = _head;     // keep the address of current node
+    Node* nextNode;         // keep the address of next node i.e. curr->next
+
+    while (curr) {
+        nextNode = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = nextNode;
+    }
+
+    // point '_head' to 'prev' not 'curr' because after while loop ends,
+    // 'curr' will be pointing to 'nullptr' while 'prev' will be pointing to
+    // the last node in the original Linked List.
+    _head = prev;
 }
 
 int main() {
     LinkedList llobj;
     llobj.printLinkedList();
-    llobj.addNodeAtStart(13);
-    llobj.printLinkedList();
-    llobj.addNodeAtEnd(5);
-    llobj.printLinkedList();
-    llobj.addNodeAtPosFromStart(3, 31);
-    llobj.printLinkedList();
-    llobj.addNodeAtPosFromEnd(2, 27);
+
+    // llobj.addNodeAtStart(13);
+    // llobj.printLinkedList();
+
+    // llobj.addNodeAtEnd(5);
+    // llobj.printLinkedList();
+
+    // llobj.addNodeAtPosFromStart(3, 31);
+    // llobj.printLinkedList();
+
+    // llobj.addNodeAtPosFromEnd(2, 27);
+    // llobj.printLinkedList();
+
+    llobj.reverseLinkedList();
     llobj.printLinkedList();
 
     return 0;
