@@ -5,8 +5,8 @@ class Node {
 public:
     int data;
     Node* next;
-    Node() : data{0} {};
-    Node(int data) : data{data} {}
+    Node() : data{0}, next{nullptr} {};
+    Node(int data) : data{data}, next{nullptr} {}
 };
 
 // LinkedList class
@@ -46,148 +46,147 @@ LinkedList::LinkedList() {
 
     _n4->data = 40;
     _n4->next = nullptr;
-    // head->next = nullptr;
+    // _head = nullptr;
 }
 
 // LinkedList class method for printing LinkedList
 void LinkedList::printLinkedList() const {
-    Node* tempNode = _head;
-    while (tempNode) {
-        std::cout << tempNode->data << " --> ";
-        tempNode = tempNode->next;
+    if (_head == nullptr) {
+        std::cout << "Empty linked list!\n";
+        return;
     }
+
+    Node* curr = _head;
+
+    while (curr) {
+        std::cout << curr->data << " --> ";
+        curr = curr->next;
+    }
+
     std::cout << "nullptr\n";
 }
 
 // LinkedList class method for adding a Node at the Start
 void LinkedList::addNodeAtStart(int data) {
-    Node* newNode = new Node(data);
-    newNode->next = _head;
-    _head = newNode;
+    Node* new_node = new Node(data);
+    new_node->next = _head;
+    _head = new_node;
 }
 
 // LinkedList class method for adding a Node at the end
 void LinkedList::addNodeAtEnd(int data) {
-    Node* newNode = new Node(data);
+    if (_head == nullptr) {
+        _head = new Node(data);
+    } else {
+        // creating a temporary node which will iterate through all the nodes
+        Node* curr = _head;
 
-    // creating a tempNode which will iterate through all the nodes
-    Node* tempNode = _head;
-    while (tempNode->next) {
-        tempNode = tempNode->next;
+        while (curr->next)
+            curr = curr->next;
+
+        curr->next = new Node(data);
     }
-
-    tempNode->next = newNode;
-    newNode->next = nullptr;
 }
 
 // LinkedList class method for adding a Node at a given Position from the Start
-// Here, indexing starts from 1. So, for index = 1, this method will add a Node
-// at the start of linked list i.e. it would become a 'head'
+// Here, indexing starts from 0. So, for `index` = 0, this method will add a Node at
+// the start of linked list i.e. it will become a `_head`
 void LinkedList::addNodeAtPosFromStart(int index, int data) {
-    if (index < 1) {
-        std::cout << "Invalid index\n";
+    if (index < 0) {
+        std::cout << "Invalid input: negative index!\n";
         return;
     }
 
-    Node* newNode = new Node(data);
+    // measure the length of linked list
+    Node* curr = _head;
+    int length = 0;
+    while (curr) {
+        length++;
+        curr = curr->next;
+    }
 
-    if (index == 1) {
-        newNode->next = _head;
-        _head = newNode;
+    // e.g. if length is 3 and index is 4 then it won't be possible to add
+    // a node at the 4th place from the end
+    if (index > length) {
+        std::cout << "Invalid input: index is more than the length of linked list!\n";
         return;
     }
 
-    Node* tempNode = _head;
-    for (int i = 1; i < index - 1; ++i) {
-        if (tempNode->next)
-            tempNode = tempNode->next;
-        else {
-            std::cout << "Index out of range!\n";
-            return;
-        }
-    }
+    Node* new_node = new Node(data);
 
-    newNode->next = tempNode->next;
-    tempNode->next = newNode;
+    // if index == 0 then make the `new_node` as `_head`
+    if (index == 0) {
+        new_node->next = _head;
+        _head = new_node;
+    } else {
+        curr = _head;
+        // e.g. for linked list 10 -> 20 -> 30 & index 1, curr should be at 10
+        for (int i = 0; i < index - 1; ++i)
+            curr = curr->next;
+
+        new_node->next = curr->next;
+        curr->next = new_node;
+    }
 }
 
 // LinkedList class method for adding a Node at a given Position from the End
-// Indexing starts from 1 i.e. for index = 1, this method will add a Node at the End
-// for index = 2, the method will add a Node at the second last place from the End
+// Indexing starts from 0 i.e.
+// for index = 0, this method will add a Node at the End
+// for index = 1, the method will add a Node at the second from the last place
 void LinkedList::addNodeAtPosFromEnd(int index, int data) {
-    if (index < 1) {
-        std::cout << "Invalid index\n";
+    if (index < 0) {
+        std::cout << "Invalid input: negative index!\n";
         return;
     }
 
-    // Node* newNode = new Node(data);
-    // Node* ptr1 = head;
-    // Node* ptr2 = head;
-
-    // for (int i = 1; i < index; ++i) {
-    //     ptr1 = ptr1->next;
-    // }
-
-    // std::cout << ptr2->data << " | " << ptr1->data << "\n";
-
-    // // if(ptr1->next == nullptr) {
-    // //     addNodeAtStart(data);
-    // // }
-
-    // while(ptr1->next) {
-    //     ptr1 = ptr1->next;
-    //     ptr2 = ptr2->next;
-    // }
-
-    // std::cout << ptr2->data << " | " << ptr1->data << "\n";
-
-    // newNode->next = ptr2->next;
-    // ptr2->next = newNode;
-
-    Node* newNode = new Node(data);
-    newNode->next = _head;
-    Node* ptr1 = newNode;
-    Node* ptr2 = newNode;
-
-    // the first pointer would be iterate through Nodes based on the index
-    // So, later on, when the first one reaches at the End, the
-    // second pointer reaches at the required index, if valid
-    for (int i = 1; i < index; ++i) {
-        if (ptr1->next)
-            ptr1 = ptr1->next;
-        else {
-            std::cout << "Index out of range!\n";
+    // if the linked list is empty!
+    if (_head == nullptr) {
+        if (index != 0) {
+            std::cout << "Invalid input: index out of range!\n";
+            return;
+        } else {
+            _head = new Node(data);
             return;
         }
     }
 
-    while (ptr1->next) {
-        ptr1 = ptr1->next;
-        ptr2 = ptr2->next;
+    // measure the length of linked list
+    Node* curr = _head;
+    int length = 0;
+    while (curr) {
+        length++;
+        curr = curr->next;
     }
 
-    // to check the place where a Node should be added is the 'Start' or not
-    if (ptr2 != newNode) {
-        newNode->next = ptr2->next;
-        ptr2->next = newNode;
-    } else {
-        ptr2->next = _head;
-        _head = ptr2;
+    // e.g. if length is 3 and index is 4 then it won't be possible to add
+    // a node at the 4th place from the end
+    if (index > length) {
+        std::cout << "Invalid input: index is more than the length of linked list!\n";
+        return;
     }
+
+    curr = _head;
+    // e.g. for linked list 10 -> 20 -> 30 & index 1, curr should be at 20
+    for (int i = 0; i < (length - index) - 1; ++i)
+        curr = curr->next;
+
+    Node* new_node = new Node(data);
+    new_node->next = curr->next;
+    curr->next = new_node;
 }
 
 // LinkedList class method for reversing LinkedList
 void LinkedList::reverseLinkedList() {
     // 3 pointers
-    Node* prev = nullptr;   // keep the address of previous node
-    Node* curr = _head;     // keep the address of current node
-    Node* nextNode;         // keep the address of next node i.e. curr->next
+    Node* prev = nullptr;  // keep the address of previous node
+    Node* curr = _head;    // keep the address of current node
+    Node* nxt = nullptr;
 
     while (curr) {
-        nextNode = curr->next;
+        nxt = curr->next;  // keep the address of next node i.e. curr->next
         curr->next = prev;
         prev = curr;
-        curr = nextNode;
+        curr = nxt;
     }
 
     // point '_head' to 'prev' not 'curr' because after while loop ends,
@@ -206,7 +205,7 @@ int main() {
     // llobj.addNodeAtEnd(5);
     // llobj.printLinkedList();
 
-    // llobj.addNodeAtPosFromStart(3, 31);
+    // llobj.addNodeAtPosFromStart(1, 31);
     // llobj.printLinkedList();
 
     // llobj.addNodeAtPosFromEnd(2, 27);
