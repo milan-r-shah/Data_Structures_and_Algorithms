@@ -15,7 +15,9 @@ public:
 class BinaryTree {
 public:
     BinaryTree();
-    void printBinaryTreeDFS(Node* node) const;
+    void printBinaryTreePreOrderTraversal(Node* node) const;
+    void printBinaryTreeInOrderTraversal(Node* node) const;
+    void printBinaryTreePostOrderTraversal(Node* node) const;
     Node* getHead();
 
 private:
@@ -42,15 +44,35 @@ BinaryTree::BinaryTree() {
     _head = new Node(1, _left, _right);
 }
 
-// BinaryTree class method for prining the tree using DFS algorithm
-void BinaryTree::printBinaryTreeDFS(Node* node) const {
+// BinaryTree class method for prining the tree using Pre-Order Traversal
+void BinaryTree::printBinaryTreePreOrderTraversal(Node* node) const {
     if (node == nullptr)
         return;
 
     std::cout << node->data << " ";
 
-    printBinaryTreeDFS(node->left);
-    printBinaryTreeDFS(node->right);
+    printBinaryTreePreOrderTraversal(node->left);
+    printBinaryTreePreOrderTraversal(node->right);
+}
+
+// BinaryTree class method for prining the tree using In-Order Traversal
+void BinaryTree::printBinaryTreeInOrderTraversal(Node* node) const {
+    if (node == nullptr)
+        return;
+
+    printBinaryTreeInOrderTraversal(node->left);
+    std::cout << node->data << " ";
+    printBinaryTreeInOrderTraversal(node->right);
+}
+
+// BinaryTree class method for prining the tree using Post-Order Traversal
+void BinaryTree::printBinaryTreePostOrderTraversal(Node* node) const {
+    if (node == nullptr)
+        return;
+
+    printBinaryTreePostOrderTraversal(node->left);
+    printBinaryTreePostOrderTraversal(node->right);
+    std::cout << node->data << " ";
 }
 
 // BinaryTree class method for returning the head of the current tree
@@ -59,8 +81,15 @@ Node* BinaryTree::getHead() {
 }
 
 int main() {
-    BinaryTree btobj;
-    btobj.printBinaryTreeDFS(btobj.getHead());
+    BinaryTree binary_tree;
+    std::cout << "Pre-Order Traversal:\t";
+    binary_tree.printBinaryTreePreOrderTraversal(binary_tree.getHead());
+    std::cout << "\n";
+    std::cout << "In-Order Traversal:\t";
+    binary_tree.printBinaryTreeInOrderTraversal(binary_tree.getHead());
+    std::cout << "\n";
+    std::cout << "Post-Order Traversal:\t";
+    binary_tree.printBinaryTreePostOrderTraversal(binary_tree.getHead());
     std::cout << "\n";
 
     return 0;
